@@ -1,7 +1,26 @@
 .collection-card {
+    /* clear link styling */
+    text-decoration: none;
+    color: unset;
+    
     padding: 10px;
     border-radius: 5px;
     filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.2));
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    background-color: var(--code-bg);
+    transition: background-color 0.3s ease;
+    overflow: visible;
+    position: relative;
+}
+
+.collection-card input {
+    font-size: 20px;
+}
+
+.collection-menu-container {
+    position: relative;
 }
 
 .collection-card h2 {
@@ -9,7 +28,53 @@
     transition: color 0.3s ease;
 }
 
+.collection-card:hover {
+    background-color: var(--social-bg);
+}
+
 .collection-card:hover h2 {
     text-decoration: underline;
     color: var(--accent);
+}
+
+.collection-menu-button {
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.collection-menu {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.collection-menu button {
+    background-color: transparent;
+    border: none;
+    padding: 4px 10px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px
+}
+
+.collection-menu button:hover {
+    background-color: var(--bg);
+}
+
+.delete-button {
+    color: var(--error);
+}
+
+.collection-menu-container {
+    position: static;
 }

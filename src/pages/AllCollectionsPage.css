@@ -1,0 +1,23 @@
+#collections-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+#add-collection-button {
+    background-color: transparent;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+#add-collection-button:hover {
+    background-color: var(--accent);
+    color: var(--bg);
+}
