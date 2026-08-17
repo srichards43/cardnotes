@@ -1,36 +1,36 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import type { Collection } from "../types/Collection"
 import './CollectionCard.css'
 
 type CollectionCardData = {
-    id: string
-    title: string
+    collection: Collection
     menuOpen: boolean
     onMenuToggle: () => void
     onDelete: (id: string) => void
     onRename: (id: string, newTitle: string) => void
 }
 
-function CollectionCard({ id, title, menuOpen, onMenuToggle, onDelete, onRename }: CollectionCardData) {
+function CollectionCard({ collection, menuOpen, onMenuToggle, onDelete, onRename }: CollectionCardData) {
     const [editing, setEditing] = useState(false)
 
     function saveTitle(newTitle: string) {
         newTitle = newTitle.trim()
 
         if (newTitle !== '') {
-            onRename(id, newTitle)
+            onRename(collection.id, newTitle)
         }
 
         setEditing(false)
     }
     
     return (
-        <Link to={`/collection/${id}`} className="collection-card">
+        <Link to={`/collection/${collection.id}`} className="collection-card">
             <div className="vlg">
 
                 {/* Replace heading with focused input when editing */}
                 {editing ? (
-                    <input defaultValue={title} autoFocus 
+                    <input id="title-field" defaultValue={collection.title} autoFocus 
                         onBlur={(event) => {
                             saveTitle(event.currentTarget.value.trim())
                         }} 
@@ -44,10 +44,10 @@ function CollectionCard({ id, title, menuOpen, onMenuToggle, onDelete, onRename 
                         }}
                     />
                 ) : (
-                    <h2>{title}</h2>
+                    <h2>{collection.title}</h2>
                 )}
 
-                <p>#{id}</p>
+                <p>#{collection.id}</p>
             </div>
 
             <div className="collection-menu-container">
@@ -71,7 +71,7 @@ function CollectionCard({ id, title, menuOpen, onMenuToggle, onDelete, onRename 
                         </button>
                         <button className="delete-button" onClick={(event) => {
                             event.preventDefault(); // block link action
-                            onDelete(id);
+                            onDelete(collection.id);
                         }}>
                             Delete
                         </button>

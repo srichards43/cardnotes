@@ -1,0 +1,12 @@
+.note-card {
+    background-color: var(--social-bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

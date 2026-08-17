@@ -17,6 +17,11 @@
 
 .collection-card input {
     font-size: 20px;
+    padding: 2px 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid var(--accent);
 }
 
 .collection-menu-container {
