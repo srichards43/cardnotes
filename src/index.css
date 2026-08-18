@@ -118,3 +118,9 @@ code {
   flex-direction: column;
   gap: 5px;
 }
+
+.image-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}

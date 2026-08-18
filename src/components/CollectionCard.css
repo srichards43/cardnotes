@@ -22,6 +22,9 @@
     border: none;
     outline: none;
     border-bottom: 2px solid var(--accent);
+    font: inherit;
+    font-weight: 500;
+    font-size: 1.3em;
 }
 
 .collection-menu-container {

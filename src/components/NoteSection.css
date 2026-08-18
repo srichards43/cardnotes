@@ -1,0 +1,43 @@
+.card-section {
+    border-left: 2px dotted var(--border);
+    border-right: 2px dotted var(--border);
+    width: 100%;
+    display: flex;
+    padding: 5px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.add-note-button {
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    color: var(--text-h);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.3s ease
+}
+
+.add-note-button:hover {
+    background-color: var(--social-bg);
+}
+
+.section-header p {
+    text-align: left;
+    background-color: transparent;
+    color: var(--text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-sizing: border-box;
+    border-radius: 2px;
+}
+
+.card-section:hover .section-header p {
+    background-color: var(--text);
+    color: var(--bg);
+}
