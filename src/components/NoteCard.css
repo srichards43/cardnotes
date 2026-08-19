@@ -49,3 +49,62 @@
     color: var(--text-h);
     font-size: 1.3em;
 }
+
+.color-picker {
+    display: flex;
+    padding: 5px;
+    border-radius: 50px;
+    background-color: transparent;
+    flex-direction: row;
+    align-items: center;
+    gap: 3px;
+    transition: background-color 0.3s ease;
+}
+
+.color-picker.open {
+    background-color: var(--social-bg);
+}
+
+.option-container {
+    flex-direction: row;
+    display: flex;
+    gap: 2px;
+    overflow: hidden;
+    width: 0;
+    opacity: 0;
+    transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.color-picker.open .option-container {
+    width: 150px;
+    overflow: visible;
+    opacity: 1;
+}
+
+.note-yellow {
+    background-color: var(--yellow-bg);
+}
+
+.note-yellow .title-field {
+    color: var(--yellow-h);
+}
+
+.note-yellow .content-field {
+    color: var(--yellow);
+}
+
+.note-blue {
+    background-color: var(--blue-bg);
+}
+
+.note-green {
+    background-color: var(--green-bg);
+}
+
+.note-red {
+    background-color: var(--red-bg);
+}
+
+.note-pink {
+    background-color: var(--pink-bg);
+}

@@ -1,0 +1,35 @@
+
+.color-option {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--border);
+    overflow: hidden;
+    color: var(--error);
+    font-size: 1.5em;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    transition: border-color 0.3s ease;
+}
+
+.color-option-inner {
+    width: 100%;
+    height: 100%;
+}
+
+.color-option:hover {
+    border-color: var(--accent-border);
+}
+
+.color-option.selected {
+    border-color: var(--accent);
+}
+
+.no-color {
+    height: 2px;
+    width: 150%;
+    background-color: var(--error);
+    transform: rotate(45deg);
+}

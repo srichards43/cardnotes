@@ -11,6 +11,8 @@
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
+  --icon-filter: brightness(0);
+
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
@@ -45,6 +47,21 @@
     --social-bg: rgba(47, 48, 58, 0.5);
     --shadow:
       rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+
+    --icon-filter: brightness(1);
+
+      /* note colors */
+    --yellow-bg: #7e751e;
+    --yellow-h: #ffe600;
+    --yellow: #cba60f;
+    
+    --blue-bg: #1b4f99;
+    --blue-h: #00aaff;
+    --blue: #0f7cc9;
+    
+    --green-bg: #2b873d;
+    --red-bg: #991b1b;
+    --pink-bg: #991b6f;
   }
 
   #social .button-icon {
@@ -123,4 +140,10 @@ code {
     background-color: transparent;
     border: none;
     cursor: pointer;
+    padding: 0;
+    color: var(--yellow);
+}
+
+.image-button img {
+  filter: var(--icon-filter);
 }
