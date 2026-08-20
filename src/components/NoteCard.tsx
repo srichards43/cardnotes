@@ -3,30 +3,26 @@ import type { Note, NoteColor } from "../types/Note"
 import ColorOption from "./ColorOption"
 import './NoteCard.css'
 import paletteIcon from '../assets/palette-icon.png'
+import trashIcon from '../assets/trash-icon.png'
 
 type NoteCardData = {
     note: Note
     onDelete: (id: string) => void
     onChange: (id: string, newTitle: string, newContent: string) => void
     onColorChange: (id: string, color: NoteColor) => void
+    paletteOpen: boolean
+    onPaletteToggle: (id: string) => void
 }
 
-function NoteCard({ note, onDelete, onChange, onColorChange }: NoteCardData) {
+function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPaletteToggle }: NoteCardData) {
     const titleRef = useRef<HTMLTextAreaElement>(null)
     const contentRef = useRef<HTMLTextAreaElement>(null)
-
-    const [paletteOpen, setPaletteOpen] = useState(false)
-
-    function changeColor(color: NoteColor) {
-        onColorChange(note.id, color)
-        setPaletteOpen(false)
-    }
 
     // Automatically adjust the height of the textarea based on content
     function autoSize(textarea: HTMLTextAreaElement | null) {
         if (!textarea) return
         textarea.style.height = 'auto'
-        textarea.style.height = `${textarea.scrollHeight}px`
+        textarea.style.height = `${textarea.scrollHeight + 2}px` // buffer for descending characters
     }
 
     // Autosize after initial render to match content
@@ -58,36 +54,41 @@ function NoteCard({ note, onDelete, onChange, onColorChange }: NoteCardData) {
                     <div className="option-container">
                         <ColorOption color="yellow" 
                             active={note.color === 'yellow'} 
-                            onClick={(color) => changeColor(color)} 
+                            onClick={(color) => onColorChange(note.id, color)} 
                         />
                         <ColorOption color="red" 
                             active={note.color === 'red'}
-                            onClick={(color) => changeColor(color)}
+                            onClick={(color) => onColorChange(note.id, color)}
                         />
                         <ColorOption color="pink" 
                             active={note.color === 'pink'} 
-                            onClick={(color) => changeColor(color)} 
+                            onClick={(color) => onColorChange(note.id, color)} 
                         />
                         <ColorOption color="blue" 
                             active={note.color === 'blue'} 
-                            onClick={(color) => changeColor(color)} 
+                            onClick={(color) => onColorChange(note.id, color)} 
                         />
                         <ColorOption color="green" 
                             active={note.color === 'green'} 
-                            onClick={(color) => changeColor(color)} 
+                            onClick={(color) => onColorChange(note.id, color)} 
                         />
                         <ColorOption color={null} 
                             active={note.color === null} 
-                            onClick={(color) => changeColor(color)} 
+                            onClick={(color) => onColorChange(note.id, color)} 
                         />
                     </div>
                 
                     <button className="image-button" onClick={() => { 
-                        setPaletteOpen(!paletteOpen)
+                        onPaletteToggle(note.id)
                     }}>
                         <img src={paletteIcon} alt="palette" width="24" height="24" />
                     </button>
                 </div>
+                <button className="image-button" onClick={() => {
+                    onDelete(note.id)
+                }}>
+                    <img src={trashIcon} alt="palette" width="24" height="24" />
+                </button>
             </div>
         </div>
     )

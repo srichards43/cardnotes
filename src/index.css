@@ -13,6 +13,22 @@
 
   --icon-filter: brightness(0);
 
+    /* note colors */
+    --yellow-bg: #fff279;
+    --yellow-h: #9c8f1d;
+    
+    --blue-bg: #79b1ff;
+    --blue-h: #1d589c;
+
+    --green-bg: #79ff79;
+    --green-h: #1d9c25;
+    
+    --red-bg: #ff7979;
+    --red-h: #9c1d1d;
+
+    --pink-bg: #ff79fb;
+    --pink-h: #9c1d78;
+
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
@@ -53,19 +69,18 @@
       /* note colors */
     --yellow-bg: #7e751e;
     --yellow-h: #ffe600;
-    --yellow: #cba60f;
     
-    --blue-bg: #1b4f99;
-    --blue-h: #00aaff;
-    --blue: #0f7cc9;
-    
-    --green-bg: #2b873d;
-    --red-bg: #991b1b;
-    --pink-bg: #991b6f;
-  }
+    --blue-bg: #133b72;
+    --blue-h: #00c3ff;
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+    --green-bg: #167213;
+    --green-h: #00ff55;
+    
+    --red-bg: #721313;
+    --red-h: #ff0000;
+
+    --pink-bg: #72134a;
+    --pink-h: #ff00aa;
   }
 }
 
@@ -105,7 +120,7 @@ h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
-  margin: 0 0 8px;
+  margin: 0;
   @media (max-width: 1024px) {
     font-size: 20px;
   }
@@ -136,6 +151,12 @@ code {
   gap: 5px;
 }
 
+.hlg {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
 .image-button {
     background-color: transparent;
     border: none;
@@ -146,4 +167,16 @@ code {
 
 .image-button img {
   filter: var(--icon-filter);
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.image-button:hover img {
+  transform: scale(1.1);
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border);
 }

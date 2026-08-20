@@ -6,11 +6,14 @@ type SectionData = {
     title: string
     notes: Note[]
     onAdd: () => void
+    onDelete: (id: string) => void
     onChange: (id: string, newTitle: string, newContent: string) => void
     onColorChange: (id: string, color: NoteColor) => void
+    openPaletteId: string | null
+    onPaletteToggle: (id: string) => void
 }
 
-function NoteSection({ title, notes, onAdd, onChange, onColorChange }: SectionData) {
+function NoteSection({ title, notes, onAdd, onDelete, onChange, onColorChange, openPaletteId, onPaletteToggle }: SectionData) {
     return (
         <div className="card-section">
             <div className="section-header">
@@ -25,9 +28,11 @@ function NoteSection({ title, notes, onAdd, onChange, onColorChange }: SectionDa
                 <NoteCard
                     key = {note.id}
                     note = {note}
-                    onDelete = {(id) => {}}
+                    onDelete = {onDelete}
                     onChange = {onChange}
                     onColorChange = {onColorChange}
+                    paletteOpen = {openPaletteId === note.id}
+                    onPaletteToggle = {onPaletteToggle}
                 />
             ))}
         </div>

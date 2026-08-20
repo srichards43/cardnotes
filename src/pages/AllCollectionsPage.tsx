@@ -3,6 +3,7 @@ import type { Collection } from '../types/Collection'
 import './AllCollectionsPage.css'
 import { useState } from 'react'
 import { getCollections, saveCollections } from '../data/collections'
+import ConfirmationPopup from '../components/ConfirmationPopup'
 
 function AllCollectionsPage() {
     const [collections, setCollections] = useState<Collection[]>(
@@ -10,6 +11,9 @@ function AllCollectionsPage() {
     );
 
     const [openCollectionId, setOpenCollectionId] = useState<string | null> (null) // returns nullable string
+    const [collectionToDelete, setCollectionToDelete] = useState<String | null>(null)
+    const deletingCollection = collections.find((collection) => collection.id === collectionToDelete)
+
 
     function addCollection() {
         const newCollection: Collection = {
@@ -23,9 +27,16 @@ function AllCollectionsPage() {
     }
 
     function deleteCollection(id: string) {
-        const updatedCollections = collections.filter((collection) => collection.id !== id);
-        setCollections(updatedCollections);
-        saveCollections(updatedCollections);
+           setCollectionToDelete(id)
+        }
+    
+    function confirmDeleteCollection() {
+        if (!collectionToDelete) return
+
+        const updatedCollections = collections.filter((collection) => collection.id !== collectionToDelete)
+        setCollections(updatedCollections)
+        saveCollections(updatedCollections)
+        setCollectionToDelete(null)
     }
 
     function renameCollection(id: string, newTitle: string) {
@@ -70,6 +81,14 @@ function AllCollectionsPage() {
                     Add Collection
                 </button>
             </div>
+            {collectionToDelete && (
+                <ConfirmationPopup 
+                    title = "Delete Collection"
+                    message = {`Are you sure you want to delete the collection "${deletingCollection?.title}"?\nThis action cannot be undone.`}
+                    onConfirm = {confirmDeleteCollection}
+                    onCancel = {() => setCollectionToDelete(null)}
+                />
+            )}
         </main>
     )
 }

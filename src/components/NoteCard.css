@@ -2,12 +2,13 @@
     background-color: var(--social-bg);
     border: 1px solid var(--border);
     border-radius: 5px;
-    padding: 10px;
+    padding: 5px;
     width: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 5px;
     text-align: left;
     min-height: 120px;
     word-break: break-word;
@@ -48,6 +49,7 @@
     font-weight: 500;
     color: var(--text-h);
     font-size: 1.3em;
+    line-height: 1.2em;
 }
 
 .color-picker {
@@ -84,27 +86,34 @@
 .note-yellow {
     background-color: var(--yellow-bg);
 }
-
-.note-yellow .title-field {
-    color: var(--yellow-h);
-}
-
 .note-yellow .content-field {
-    color: var(--yellow);
+    color: var(--yellow-h);
 }
 
 .note-blue {
     background-color: var(--blue-bg);
 }
+.note-blue .content-field {
+    color: var(--blue-h);
+}
 
 .note-green {
     background-color: var(--green-bg);
+}
+.note-green .content-field {
+    color: var(--green-h);
 }
 
 .note-red {
     background-color: var(--red-bg);
 }
+.note-red .content-field {
+    color: var(--red-h);
+}
 
 .note-pink {
     background-color: var(--pink-bg);
+}
+.note-pink .content-field {
+    color: var(--pink-h);
 }

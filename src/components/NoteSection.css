@@ -5,7 +5,7 @@
     display: flex;
     padding: 5px;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
 }
 
 .section-header {
