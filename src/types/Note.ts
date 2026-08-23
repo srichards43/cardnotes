@@ -1,4 +1,4 @@
-export type NoteColor = 'yellow' | 'blue' | 'green' | 'red' | 'pink' | null
+export type NoteColor = 'yellow' | 'blue' | 'green' | 'red' | 'orange' | 'pink' | null
 
 export type Note = {
     id : string

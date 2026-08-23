@@ -86,3 +86,8 @@
 .collection-menu-container {
     position: static;
 }
+
+.collection-id {
+    font-size: 0.8em;
+    color: var(--text);
+}

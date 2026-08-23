@@ -6,12 +6,13 @@ import './CollectionCard.css'
 type CollectionCardData = {
     collection: Collection
     menuOpen: boolean
+    cardCount: number
     onMenuToggle: () => void
     onDelete: (id: string) => void
     onRename: (id: string, newTitle: string) => void
 }
 
-function CollectionCard({ collection, menuOpen, onMenuToggle, onDelete, onRename }: CollectionCardData) {
+function CollectionCard({ collection, menuOpen, cardCount, onMenuToggle, onDelete, onRename }: CollectionCardData) {
     const [editing, setEditing] = useState(false)
 
     function saveTitle(newTitle: string) {
@@ -46,8 +47,8 @@ function CollectionCard({ collection, menuOpen, onMenuToggle, onDelete, onRename
                 ) : (
                     <h2>{collection.title}</h2>
                 )}
-
-                <p>#{collection.id}</p>
+                <p>{cardCount} cards</p>
+                <p className="collection-id">#{collection.id}</p>
             </div>
 
             <div className="collection-menu-container">

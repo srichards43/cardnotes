@@ -5,23 +5,31 @@ import { useParams, useNavigate } from 'react-router-dom'
 import type { Collection } from '../types/Collection'
 import NoteSection from '../components/NoteSection'
 import type { Note, NoteColor } from '../types/Note'
-import { getNotes, saveNotes } from '../data/notes'
-import { getCollections } from '../data/collections'
+import { getCollections, saveCollections } from '../data/collections'
 import ConfirmationPopup from '../components/ConfirmationPopup'
 import returnIcon from '../assets/return-icon.png'
+import exportIcon from '../assets/export-icon.png'
 import './CollectionPage.css'
 
 function CollectionPage() {
     const { id } = useParams()
 
-    const collections: Collection[] = getCollections()
+    const [collections, setCollections] = useState<Collection[]>(
+        getCollections()
+    )
 
-    const collection = collections.find((collection) => collection.id === id)
-
-    const [notes, setNotes] = useState<Note[]>(getNotes())
+    const collection = collections.find(
+        collection => collection.id === id
+    )
 
     const [noteToDelete, setNoteToDelete] = useState<String | null>(null)
-    const deletingNote = notes.find((note) => note.id === noteToDelete)
+    const deletingNote = collection?.notes.find(note => note.id === noteToDelete)
+
+    const [draggedNoteId, setDraggedNoteId] = useState<string | null>(null)
+    const [dropTarget, setDropTarget] = useState<{
+        section: Note['status']
+        index: number
+    } | null>(null)
 
     const [openPaletteId, setOpenPaletteId] = useState<string | null>(null)
 
@@ -32,6 +40,7 @@ function CollectionPage() {
         return <h1>Collection not found</h1>
     }
 
+    // Create new empty note and add it to the collection
     function addNote(status: Note['status']) {
         if (!collection) {
             return
@@ -40,16 +49,18 @@ function CollectionPage() {
         const newNote: Note = {
             id: crypto.randomUUID(),
             title: 'New Note',
-            content: 'Note content',
+            content: '',
             collectionId: collection.id,
             status: status,
-            color: null
+            color: null,
         }
 
-        const updatedNotes = [...notes, newNote]
+        const updatedCollection = {
+            ...collection,
+            notes: [...collection.notes, newNote]
+        }
 
-        setNotes(updatedNotes)
-        saveNotes(updatedNotes)
+        updateCollection(updatedCollection)
     }
 
     function deleteNote(id: string) {
@@ -57,24 +68,35 @@ function CollectionPage() {
     }
 
     function confirmDeleteNote() {
-        if (!noteToDelete) return
+        if (!noteToDelete || !collection) return
 
-        const updatedNotes = notes.filter((note) => note.id !== noteToDelete)
-        setNotes(updatedNotes)
-        saveNotes(updatedNotes)
+        const updatedCollection = {
+            ...collection,
+            notes: collection.notes.filter((note) => note.id !== noteToDelete)
+        }
+
+        updateCollection(updatedCollection)
         setNoteToDelete(null)
     }
 
     function updateNote(id: string, newTitle: string, newContent: string) {
-        const updatedNotes = notes.map((note) => {
-            if (note.id === id) {
-                return { ...note, title: newTitle, content: newContent }
-            }
-            return note
-        })
+        if (!collection) return
 
-        setNotes(updatedNotes)
-        saveNotes(updatedNotes)
+        const note = collection.notes.find((note) => note.id === id)
+        if (!note) return
+        const updatedNote = { ...note, title: newTitle, content: newContent }
+        
+        const updatedCollection = {
+            ...collection,
+            notes: collection.notes.map(note => {
+                if (note.id === id) {
+                    return updatedNote
+                }
+                return note
+            })
+        }
+
+        updateCollection(updatedCollection)
     }
 
     function togglePalette(id: string) {
@@ -86,56 +108,128 @@ function CollectionPage() {
     }
 
     function changeNoteColor(id: string, newColor: NoteColor) {
-        const updatedNotes = notes.map((note) => {
+        if (!collection) return
+
+        const updatedNotes = collection.notes.map(note => {
             if (note.id === id) {
                 return { ...note, color: newColor }
             }
+
             return note
         })
 
-        setNotes(updatedNotes)
-        saveNotes(updatedNotes)
+        const updatedCollection = {
+            ...collection,
+            notes: updatedNotes
+        }
+
+        updateCollection(updatedCollection)
+    }
+
+    function startDrag(id: string) {
+        console.log(`Dragging note with id: ${id}`)
+        setDraggedNoteId(id)
+    }
+
+    function handleDragOver(event: React.DragEvent, index: number, section: Note['status']) {
+        event.preventDefault()
+
+        setDropTarget({
+            section, index
+        })
+    }
+
+    function handleDrop(section: Note['status'], index: number) {
+        if (!draggedNoteId || !collection) return
+
+        const draggedNote = collection.notes.find(note => note.id === draggedNoteId)
+        if (!draggedNote) return
+
+        const remainingNotes = collection.notes.filter(note => note.id !== draggedNoteId)
+
+        const movedNote = {...draggedNote, status: section}
+
+        const targetNotes = remainingNotes.filter(note => note.status === section)
+
+        targetNotes.splice(index, 0, movedNote)
+
+        const otherNotes = remainingNotes.filter(note => note.status !== section)
+
+        const updatedNotes = [...otherNotes, ...targetNotes]
+
+        updateCollection({...collection, notes: updatedNotes})
+
+        setDraggedNoteId(null)
+        setDropTarget(null)
+    }
+
+    // Helper function for updating collection notes
+    function updateCollection(updatedCollection: Collection) {
+        const updatedCollections = collections.map((collection) => {
+            if (collection.id === updatedCollection.id) {
+                return updatedCollection
+            }
+
+            return collection
+        })
+
+        setCollections(updatedCollections)
+        saveCollections(updatedCollections)
     }
 
     return (
         <main>
-            <div id="collection-header">
+            <div id="page-header">
                 <button className="image-button" onClick={() => navigate('/')}>
                     <img src={returnIcon} alt="return" width="40" height="40" />
                 </button>
                 <h1>{collection.title}</h1>
-                <div></div>
+                <button className="image-button" onClick={() => navigate('/')}>
+                    <img src={exportIcon} alt="export" width="40" height="40" />
+                </button>
             </div>
             <div id="card-section-container">
                 <NoteSection
                     title="To Do"
-                    notes={notes.filter((note) => note.collectionId === collection.id && note.status === 'todo')}
+                    status="todo"
+                    notes={collection.notes.filter(note => note.status === 'todo')}
                     onAdd={() => addNote('todo')}
                     onDelete={deleteNote}
                     onChange={updateNote}
                     onColorChange={changeNoteColor}
                     openPaletteId={openPaletteId}
                     onPaletteToggle={togglePalette}
+                    onDragStart={startDrag}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
                 />
                 <NoteSection
                     title="In Progress"
-                    notes={notes.filter((note) => note.collectionId === collection.id && note.status === 'in-progress')}
+                    status="in-progress"
+                    notes={collection.notes.filter(note => note.status === 'in-progress')}
                     onAdd={() => addNote('in-progress')}
                     onDelete={deleteNote}
                     onChange={updateNote}
                     onColorChange={changeNoteColor}
                     openPaletteId={openPaletteId}
                     onPaletteToggle={togglePalette}
+                    onDragStart={startDrag}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
                 />
                 <NoteSection
                     title="Done"
-                    notes={notes.filter((note) => note.collectionId === collection.id && note.status === 'done')}
+                    status="done"
+                    notes={collection.notes.filter(note => note.status === 'done')}
                     onAdd={() => addNote('done')}
                     onDelete={deleteNote}
                     onChange={updateNote}
                     onColorChange={changeNoteColor}
                     openPaletteId={openPaletteId}
                     onPaletteToggle={togglePalette}
+                    onDragStart={startDrag}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
                 />
             </div>
             {noteToDelete && deletingNote && (

@@ -78,7 +78,7 @@
 }
 
 .color-picker.open .option-container {
-    width: 150px;
+    width: 174px;
     overflow: visible;
     opacity: 1;
 }
@@ -116,4 +116,11 @@
 }
 .note-pink .content-field {
     color: var(--pink-h);
+}
+
+.note-orange {
+    background-color: var(--orange-bg);
+}
+.note-orange .content-field {
+    color: var(--orange-h);
 }

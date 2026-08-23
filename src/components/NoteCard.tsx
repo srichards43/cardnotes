@@ -12,9 +12,10 @@ type NoteCardData = {
     onColorChange: (id: string, color: NoteColor) => void
     paletteOpen: boolean
     onPaletteToggle: (id: string) => void
+    onDragStart: (id: string) => void
 }
 
-function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPaletteToggle }: NoteCardData) {
+function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPaletteToggle, onDragStart }: NoteCardData) {
     const titleRef = useRef<HTMLTextAreaElement>(null)
     const contentRef = useRef<HTMLTextAreaElement>(null)
 
@@ -32,7 +33,8 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
     }, [])
 
     return (
-        <div className={`note-card ${note.color ? `note-${note.color}` : ''}`}>
+        <div className={`note-card ${note.color ? `note-${note.color}` : ''}`}
+            draggable onDragStart={() => onDragStart(note.id)}>
             <textarea ref={titleRef} className="title-field" value={note.title} autoFocus
                 onChange={(event) => { 
                     onChange(note.id, event.target.value, note.content)
@@ -41,7 +43,7 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
                 rows={1} 
             />
 
-            <textarea ref={contentRef} className="content-field" value={note.content} 
+            <textarea ref={contentRef} className="content-field" placeholder="..." value={note.content} 
                 onChange={(event) => { 
                     onChange(note.id, note.title, event.target.value)
                     autoSize(contentRef.current)
@@ -54,6 +56,10 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
                     <div className="option-container">
                         <ColorOption color="yellow" 
                             active={note.color === 'yellow'} 
+                            onClick={(color) => onColorChange(note.id, color)} 
+                        />
+                        <ColorOption color="orange" 
+                            active={note.color === 'orange'} 
                             onClick={(color) => onColorChange(note.id, color)} 
                         />
                         <ColorOption color="red" 
