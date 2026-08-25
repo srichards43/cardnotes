@@ -4,7 +4,7 @@ import './AllCollectionsPage.css'
 import { useState } from 'react'
 import { getCollections, saveCollections } from '../data/collections'
 import ConfirmationPopup from '../components/ConfirmationPopup'
-import exportIcon from '../assets/export-icon.png'
+import settingsIcon from '../assets/settings-icon.png'
 
 function AllCollectionsPage() {
     const [collections, setCollections] = useState<Collection[]>(
@@ -67,7 +67,7 @@ function AllCollectionsPage() {
                 <div></div>
                 <h1>All Collections</h1>
                 <button className="image-button">
-                    <img src={exportIcon} alt="export" width="40" height="40" />
+                    <img src={settingsIcon} alt="settings" width="40" height="40" />
                 </button>
             </div>
             <div id="collections-list">

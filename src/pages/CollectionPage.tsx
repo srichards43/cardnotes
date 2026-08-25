@@ -131,16 +131,17 @@ function CollectionPage() {
         setDraggedNoteId(id)
     }
 
-    function handleDragOver(event: React.DragEvent, index: number, section: Note['status']) {
-        event.preventDefault()
-
+    function handleDragOver(index: number, section: Note['status']) {
         setDropTarget({
-            section, index
+            section,
+            index
         })
     }
 
-    function handleDrop(section: Note['status'], index: number) {
-        if (!draggedNoteId || !collection) return
+    function handleDrop() {
+        if (!draggedNoteId || !collection || !dropTarget) return
+
+        const { index, section } = dropTarget
 
         const draggedNote = collection.notes.find(note => note.id === draggedNoteId)
         if (!draggedNote) return
@@ -149,15 +150,18 @@ function CollectionPage() {
 
         const movedNote = {...draggedNote, status: section}
 
-        const targetNotes = remainingNotes.filter(note => note.status === section)
+        const targetIds = remainingNotes.filter(note => note.status === section).map(note => note.id)
 
-        targetNotes.splice(index, 0, movedNote)
+        if (index >= targetIds.length) {
+            remainingNotes.push(movedNote);
+        } else {
+            const targetId = targetIds[index];
+            const targetIndex = remainingNotes.findIndex(note => note.id === targetId);
 
-        const otherNotes = remainingNotes.filter(note => note.status !== section)
-
-        const updatedNotes = [...otherNotes, ...targetNotes]
-
-        updateCollection({...collection, notes: updatedNotes})
+            remainingNotes.splice(targetIndex, 0, movedNote);
+        }
+        
+        updateCollection({...collection, notes: remainingNotes})
 
         setDraggedNoteId(null)
         setDropTarget(null)

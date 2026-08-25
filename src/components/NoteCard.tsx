@@ -13,9 +13,10 @@ type NoteCardData = {
     paletteOpen: boolean
     onPaletteToggle: (id: string) => void
     onDragStart: (id: string) => void
+    onDragOver: (position: 'above' | 'below') => void
 }
 
-function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPaletteToggle, onDragStart }: NoteCardData) {
+function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPaletteToggle, onDragStart, onDragOver }: NoteCardData) {
     const titleRef = useRef<HTMLTextAreaElement>(null)
     const contentRef = useRef<HTMLTextAreaElement>(null)
 
@@ -26,6 +27,20 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
         textarea.style.height = `${textarea.scrollHeight + 2}px` // buffer for descending characters
     }
 
+    // Check mouse position relative to card midpoint
+    function handleDragOver(event: React.DragEvent) {
+        event.preventDefault()
+        event.stopPropagation()
+
+        const rect = event.currentTarget.getBoundingClientRect()
+        const midpoint = rect.top + rect.height / 2
+
+        if (event.clientY < midpoint) {
+            onDragOver('above');
+        } else {
+            onDragOver('below');
+        }
+    }
     // Autosize after initial render to match content
     useEffect(() => {
         autoSize(titleRef.current)
@@ -34,7 +49,9 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
 
     return (
         <div className={`note-card ${note.color ? `note-${note.color}` : ''}`}
-            draggable onDragStart={() => onDragStart(note.id)}>
+            draggable onDragStart={() => onDragStart(note.id)}
+            onDragOver={handleDragOver}
+        >
             <textarea ref={titleRef} className="title-field" value={note.title} autoFocus
                 onChange={(event) => { 
                     onChange(note.id, event.target.value, note.content)

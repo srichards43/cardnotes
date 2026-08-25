@@ -13,15 +13,18 @@ type SectionData = {
     openPaletteId: string | null
     onPaletteToggle: (id: string) => void
     onDragStart: (id: string) => void
-    onDragOver: (event: React.DragEvent, index: number, status: Note['status']) => void
-    onDrop: (status: Note['status'], index: number) => void
+    onDragOver: (index: number, status: Note['status']) => void
+    onDrop: (index: number, status: Note['status']) => void
 }
 
 function NoteSection({ title, status, notes, onAdd, onDelete, onChange, onColorChange, openPaletteId, onPaletteToggle, onDragStart, onDragOver, onDrop }: SectionData) {
     return (
         <div className="card-section"
-            onDragOver={(event) => onDragOver(event, notes.length, status)}
-            onDrop={() => onDrop(status, notes.length)}
+            onDragOver={(event) => {
+                event.preventDefault(); 
+                onDragOver(notes.length, status)
+            }}
+            onDrop={() => onDrop(notes.length, status)}
         >
             <div className="section-header">
                 <p>{title}</p>
@@ -31,7 +34,7 @@ function NoteSection({ title, status, notes, onAdd, onDelete, onChange, onColorC
                 </button>
             </div>
 
-            {notes.map((note) => (
+            {notes.map((note, index) => (
                 <NoteCard
                     key = {note.id}
                     note = {note}
@@ -41,6 +44,14 @@ function NoteSection({ title, status, notes, onAdd, onDelete, onChange, onColorC
                     paletteOpen = {openPaletteId === note.id}
                     onPaletteToggle = {onPaletteToggle}
                     onDragStart = {onDragStart}
+                    onDragOver = {(position) => {
+                        let dropIndex = index
+
+                        if (position === 'below') {
+                            dropIndex += 1
+                        }
+                        onDragOver(dropIndex, status)
+                    }}
                 />
             ))}
         </div>
