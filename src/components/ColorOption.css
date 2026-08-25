@@ -17,6 +17,7 @@
 .color-option-inner {
     width: 100%;
     height: 100%;
+    background-color: var(--note-color, var(--transparent-bg));
 }
 
 .color-option:hover {

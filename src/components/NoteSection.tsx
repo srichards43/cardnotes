@@ -1,6 +1,7 @@
 import NoteCard from "./NoteCard"
 import type { Note, NoteColor } from "../types/Note"
 import './NoteSection.css'
+import { Fragment } from 'react'
 
 type SectionData = {
     title: string
@@ -12,20 +13,42 @@ type SectionData = {
     onColorChange: (id: string, color: NoteColor) => void
     openPaletteId: string | null
     onPaletteToggle: (id: string) => void
+
     onDragStart: (id: string) => void
     onDragOver: (index: number, status: Note['status']) => void
-    onDrop: (index: number, status: Note['status']) => void
+    onDragEnd: () => void
+    onDrop: () => void
+    dropTarget: { section: Note['status'], index: number } | null
 }
 
-function NoteSection({ title, status, notes, onAdd, onDelete, onChange, onColorChange, openPaletteId, onPaletteToggle, onDragStart, onDragOver, onDrop }: SectionData) {
+function NoteSection({ title, status, notes, onAdd, onDelete, onChange, onColorChange, openPaletteId, onPaletteToggle, onDragStart, onDragOver, onDragEnd, onDrop, dropTarget }: SectionData) {
+
+    // Go through all card midpoints in section and determine index
+    function handleSectionDragOver(event: React.DragEvent) {
+        event.preventDefault()
+
+        const cards = Array.from(event.currentTarget.querySelectorAll('.note-card'))
+        let dropIndex = notes.length
+
+        for (let i = 0; i < cards.length; i++) {
+            const rect = cards[i].getBoundingClientRect()
+            const midpoint = rect.top + rect.height / 2
+
+            if (event.clientY < midpoint) {
+                dropIndex = i
+                break
+            }
+        }
+
+        onDragOver(dropIndex, status)
+    }
+    
     return (
         <div className="card-section"
-            onDragOver={(event) => {
-                event.preventDefault(); 
-                onDragOver(notes.length, status)
-            }}
-            onDrop={() => onDrop(notes.length, status)}
+            onDragOver={(event) => {handleSectionDragOver(event)}}
+            onDrop={() => onDrop()}
         >
+                
             <div className="section-header">
                 <p>{title}</p>
 
@@ -35,25 +58,30 @@ function NoteSection({ title, status, notes, onAdd, onDelete, onChange, onColorC
             </div>
 
             {notes.map((note, index) => (
-                <NoteCard
-                    key = {note.id}
-                    note = {note}
-                    onDelete = {onDelete}
-                    onChange = {onChange}
-                    onColorChange = {onColorChange}
-                    paletteOpen = {openPaletteId === note.id}
-                    onPaletteToggle = {onPaletteToggle}
-                    onDragStart = {onDragStart}
-                    onDragOver = {(position) => {
-                        let dropIndex = index
+                <Fragment key={note.id}>
+                    {dropTarget?.section === status &&
+                    dropTarget.index === index && (
+                        <div className="drop-indicator" />
+                    )}
 
-                        if (position === 'below') {
-                            dropIndex += 1
-                        }
-                        onDragOver(dropIndex, status)
-                    }}
-                />
+                    <NoteCard
+                        note={note}
+                        onDelete={onDelete}
+                        onChange={onChange}
+                        onColorChange={onColorChange}
+                        paletteOpen={openPaletteId === note.id}
+                        onPaletteToggle={onPaletteToggle}
+                        onDragStart={onDragStart}
+                        onDragEnd={onDragEnd}
+                    />
+                </Fragment>
             ))}
+
+            {/* Show drop indicator at end of list if final note */}
+            {dropTarget?.section === status &&
+            dropTarget.index === notes.length && (
+                <div className="drop-indicator" />
+            )}
         </div>
     )
 }

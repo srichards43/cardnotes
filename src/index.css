@@ -17,21 +17,27 @@
 
     /* note colors */
     --yellow-bg: #fff279;
+    --yellow: #d4d42a;
     --yellow-h: #9c8f1d;
     
     --blue-bg: #79b1ff;
+    --blue: #3990e0;
     --blue-h: #1d589c;
 
     --green-bg: #79ff79;
+    --green: #2ed534;
     --green-h: #1d9c25;
     
     --red-bg: #ff7979;
+    --red: #e03b3b;
     --red-h: #9c1d1d;
 
     --orange-bg: #ffb279;
+    --orange: #e27e36;
     --orange-h: #9c5a1d;
 
     --pink-bg: #ff79fb;
+    --pink: #e639a1;
     --pink-h: #9c1d78;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -75,21 +81,27 @@
 
       /* note colors */
     --yellow-bg: #7e751e;
+    --yellow: #b7a717;
     --yellow-h: #ffe600;
     
     --blue-bg: #133b72;
+    --blue: #176ab7;
     --blue-h: #00c3ff;
 
     --green-bg: #167213;
+    --green: #00b71d;
     --green-h: #00ff55;
     
     --red-bg: #721313;
+    --red: #b71d1d;
     --red-h: #ff0000;
 
     --orange-bg: #723b13;
+    --orange: #b75a17;
     --orange-h: #ff8800;
 
     --pink-bg: #72134a;
+    --pink: #b71d7a;
     --pink-h: #ff00aa;
   }
 }
@@ -179,6 +191,7 @@ code {
   filter: var(--icon-filter);
   transform: scale(1);
   transition: transform 0.3s ease;
+  will-change: transform;
 }
 
 .image-button:hover img {

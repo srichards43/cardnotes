@@ -126,7 +126,7 @@ function CollectionPage() {
         updateCollection(updatedCollection)
     }
 
-    function startDrag(id: string) {
+    function handleDragStart(id: string) {
         console.log(`Dragging note with id: ${id}`)
         setDraggedNoteId(id)
     }
@@ -138,9 +138,17 @@ function CollectionPage() {
         })
     }
 
-    function handleDrop() {
-        if (!draggedNoteId || !collection || !dropTarget) return
+    function handleDragEnd() {
+        setDraggedNoteId(null)
+        setDropTarget(null)
+    }
 
+    function handleDrop() {
+        if (!draggedNoteId || !collection || !dropTarget) {
+            setDraggedNoteId(null)
+            setDropTarget(null)
+            return
+        }
         const { index, section } = dropTarget
 
         const draggedNote = collection.notes.find(note => note.id === draggedNoteId)
@@ -203,9 +211,11 @@ function CollectionPage() {
                     onColorChange={changeNoteColor}
                     openPaletteId={openPaletteId}
                     onPaletteToggle={togglePalette}
-                    onDragStart={startDrag}
+                    onDragStart={handleDragStart}
                     onDragOver={handleDragOver}
+                    onDragEnd={handleDragEnd}
                     onDrop={handleDrop}
+                    dropTarget={dropTarget}
                 />
                 <NoteSection
                     title="In Progress"
@@ -217,9 +227,11 @@ function CollectionPage() {
                     onColorChange={changeNoteColor}
                     openPaletteId={openPaletteId}
                     onPaletteToggle={togglePalette}
-                    onDragStart={startDrag}
+                    onDragStart={handleDragStart}
                     onDragOver={handleDragOver}
+                    onDragEnd={handleDragEnd}
                     onDrop={handleDrop}
+                    dropTarget={dropTarget}
                 />
                 <NoteSection
                     title="Done"
@@ -231,9 +243,11 @@ function CollectionPage() {
                     onColorChange={changeNoteColor}
                     openPaletteId={openPaletteId}
                     onPaletteToggle={togglePalette}
-                    onDragStart={startDrag}
+                    onDragStart={handleDragStart}
                     onDragOver={handleDragOver}
+                    onDragEnd={handleDragEnd}
                     onDrop={handleDrop}
+                    dropTarget={dropTarget}
                 />
             </div>
             {noteToDelete && deletingNote && (

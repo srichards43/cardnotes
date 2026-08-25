@@ -12,35 +12,54 @@ type NoteCardData = {
     onColorChange: (id: string, color: NoteColor) => void
     paletteOpen: boolean
     onPaletteToggle: (id: string) => void
+
     onDragStart: (id: string) => void
-    onDragOver: (position: 'above' | 'below') => void
+    onDragEnd: () => void
 }
 
-function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPaletteToggle, onDragStart, onDragOver }: NoteCardData) {
+const HEIGHT_BUFFER = 5;
+
+function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPaletteToggle, onDragStart, onDragEnd }: NoteCardData) {
     const titleRef = useRef<HTMLTextAreaElement>(null)
     const contentRef = useRef<HTMLTextAreaElement>(null)
+    const [dragging, setDragging] = useState(false)
 
     // Automatically adjust the height of the textarea based on content
     function autoSize(textarea: HTMLTextAreaElement | null) {
         if (!textarea) return
         textarea.style.height = 'auto'
-        textarea.style.height = `${textarea.scrollHeight + 2}px` // buffer for descending characters
+        textarea.style.height = `${textarea.scrollHeight + HEIGHT_BUFFER}px` // buffer for descending characters
     }
 
-    // Check mouse position relative to card midpoint
-    function handleDragOver(event: React.DragEvent) {
-        event.preventDefault()
-        event.stopPropagation()
+    function handleDragStart(event: React.DragEvent) {
+        setDragging(true)
+    onDragStart(note.id)
 
-        const rect = event.currentTarget.getBoundingClientRect()
-        const midpoint = rect.top + rect.height / 2
+    const dragImage = document.createElement('div')
 
-        if (event.clientY < midpoint) {
-            onDragOver('above');
-        } else {
-            onDragOver('below');
-        }
+    dragImage.textContent = note.title
+  
+    dragImage.classList.add('tooltip')
+
+    if (note.color) {
+        dragImage.classList.add(`note-${note.color}`)
     }
+    document.body.appendChild(dragImage)
+
+    event.dataTransfer.setDragImage(dragImage, 20, 20)
+
+    setTimeout(() => {
+        document.body.removeChild(dragImage)
+    }, 0)
+}
+    function handleDragEnd() {
+        onDragEnd()
+        
+        requestAnimationFrame(() => {
+            setDragging(false)
+        })
+    }
+
     // Autosize after initial render to match content
     useEffect(() => {
         autoSize(titleRef.current)
@@ -48,9 +67,8 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
     }, [])
 
     return (
-        <div className={`note-card ${note.color ? `note-${note.color}` : ''}`}
-            draggable onDragStart={() => onDragStart(note.id)}
-            onDragOver={handleDragOver}
+        <div className={`note-card ${dragging ? 'dragging' : ''} ${note.color ? `note-${note.color}` : ''}`}
+            draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd}
         >
             <textarea ref={titleRef} className="title-field" value={note.title} autoFocus
                 onChange={(event) => { 
@@ -60,7 +78,7 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
                 rows={1} 
             />
 
-            <textarea ref={contentRef} className="content-field" placeholder="..." value={note.content} 
+            <textarea ref={contentRef} className="content-field" value={note.content} 
                 onChange={(event) => { 
                     onChange(note.id, note.title, event.target.value)
                     autoSize(contentRef.current)

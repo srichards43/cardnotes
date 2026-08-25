@@ -1,18 +1,19 @@
 .note-card {
-    background-color: var(--social-bg);
-    border: 1px solid var(--border);
+    background-color: var(--note-bg, var(--social-bg));
+    border: 1px solid var(--note-h, var(--border));
     border-radius: 5px;
-    padding: 5px;
+    padding: 3px;
     width: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 5px;
+    gap: 2px;
     text-align: left;
-    min-height: 120px;
     word-break: break-word;
     cursor: grab;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    will-change: transform, opacity;
 }
 
 .note-card h2 {
@@ -29,7 +30,7 @@
     width: 100%;
     box-sizing: border-box;
     font: inherit;
-    color: var(--text);
+    color: var(--note-h, var(--text));
     background: transparent;
     border: 1px solid transparent;
     border-radius: 3px;
@@ -42,12 +43,12 @@
 
 .title-field:focus,
 .content-field:focus {
-    border-color: var(--transparent-bg);
+    border-color: var(--note-color, var(--accent-border));
 }
 
 .title-field::placeholder,
 .content-field::placeholder {
-    color: var(--transparent-bg);
+    color: var(--note-color, var(--text));
 }
 
 .title-field {
@@ -55,7 +56,6 @@
     font-weight: 500;
     color: var(--text-h);
     font-size: 1.3em;
-    line-height: 1.2em;
 }
 
 .color-picker {
@@ -92,44 +92,60 @@
 }
 
 .note-yellow {
-    background-color: var(--yellow-bg);
-}
-.note-yellow .content-field {
-    color: var(--yellow-h);
-    placeholder-color: var(--yellow-h);
+    --note-bg: var(--yellow-bg);
+    --note-color: var(--yellow);
+    --note-h: var(--yellow-h);
 }
 
 .note-blue {
-    background-color: var(--blue-bg);
-}
-.note-blue .content-field {
-    color: var(--blue-h);
+    --note-bg: var(--blue-bg);
+    --note-color: var(--blue);
+    --note-h: var(--blue-h);
 }
 
 .note-green {
-    background-color: var(--green-bg);
-}
-.note-green .content-field {
-    color: var(--green-h);
+    --note-bg: var(--green-bg);
+    --note-color: var(--green);
+    --note-h: var(--green-h);
 }
 
 .note-red {
-    background-color: var(--red-bg);
-}
-.note-red .content-field {
-    color: var(--red-h);
+    --note-bg: var(--red-bg);
+    --note-color: var(--red);
+    --note-h: var(--red-h);
 }
 
 .note-pink {
-    background-color: var(--pink-bg);
-}
-.note-pink .content-field {
-    color: var(--pink-h);
+    --note-bg: var(--pink-bg);
+    --note-color: var(--pink);
+    --note-h: var(--pink-h);
 }
 
 .note-orange {
-    background-color: var(--orange-bg);
+    --note-bg: var(--orange-bg);
+    --note-color: var(--orange);
+    --note-h: var(--orange-h);
 }
-.note-orange .content-field {
-    color: var(--orange-h);
+
+.tooltip {
+    border-left: 4px solid var(--note-h, var(--border));
+    background: var(--note-color, var(--bg));
+    color: var(--text-h);
+    position: absolute;
+    top: -1000px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.title-field {
+    background-color: transparent;
+    border-bottom: 2px dotted var(--note-color, var(--accent-border));
+}
+
+.note-card.dragging {
+    opacity: 0.3;
+    transform: scale(0.95);
 }
