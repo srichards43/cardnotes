@@ -1,5 +1,5 @@
 .note-card {
-    background-color: var(--note-bg, var(--social-bg));
+    background-color: var(--note-bg, var(--bg-alt));
     border: 1px solid var(--note-h, var(--border));
     border-radius: 5px;
     padding: 3px;
@@ -14,6 +14,10 @@
     cursor: grab;
     transition: transform 0.3s ease, opacity 0.3s ease;
     will-change: transform, opacity;
+}
+
+.note-card:hover {
+    outline: 1px solid var(--note-h, var(--accent-border));
 }
 
 .note-card h2 {

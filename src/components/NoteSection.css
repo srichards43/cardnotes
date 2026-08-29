@@ -32,7 +32,7 @@
 .section-header p {
     text-align: left;
     background-color: transparent;
-    color: var(--text);
+    color: var(--text-h);
     transition: background-color 0.3s ease, color 0.3s ease;
     box-sizing: border-box;
     border-radius: 2px;
@@ -40,13 +40,12 @@
 }
 
 .card-section:hover .section-header p {
-    background-color: var(--text);
-    color: var(--bg);
+    text-decoration: underline;
 }
 
 .drop-indicator {
     height: 0px;
     width: 100%;
     border-radius: 2px;
-    border: 2px dashed var(--accent);
+    border: 2px dashed var(--note-h, var(--accent));
 }

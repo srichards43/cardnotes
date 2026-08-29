@@ -27,27 +27,9 @@
     gap: 20px;
 }
 
-.popup button {
-    font-size: 0.8em;
-    padding: 5px;
-    background-color: transparent;
-    border: 2px solid var(--text);
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-weight: bold;
-    color: var(--text);
-}
-
-.popup button:hover {
-    background-color: var(--text);
-    color: var(--bg);
-}
-
 .popup .delete-button {
     border-color: var(--red-h);
     color: var(--red-h);
-    border-radius: 3px;
 }
 
 .popup .delete-button:hover {

@@ -2,6 +2,7 @@ import CollectionCard from '../components/CollectionCard'
 import type { Collection } from '../types/Collection'
 import './AllCollectionsPage.css'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getCollections, saveCollections } from '../data/collections'
 import ConfirmationPopup from '../components/ConfirmationPopup'
 import settingsIcon from '../assets/settings-icon.png'
@@ -14,6 +15,8 @@ function AllCollectionsPage() {
     const [openCollectionId, setOpenCollectionId] = useState<string | null> (null) // returns nullable string
     const [collectionToDelete, setCollectionToDelete] = useState<String | null>(null)
     const deletingCollection = collections.find((collection) => collection.id === collectionToDelete)
+
+    const navigate = useNavigate()
 
     function addCollection() {
         const newCollection: Collection = {
@@ -64,9 +67,9 @@ function AllCollectionsPage() {
     return (
         <main>
             <div id="page-header">
-                <div></div>
+                <div className="empty-header"></div>
                 <h1>All Collections</h1>
-                <button className="image-button">
+                <button className="image-button" onClick={() => navigate('/settings')}>
                     <img src={settingsIcon} alt="settings" width="40" height="40" />
                 </button>
             </div>
@@ -85,7 +88,7 @@ function AllCollectionsPage() {
                     />
                 ))}
 
-                <button id="add-collection-button" onClick={addCollection}>
+                <button id="add-collection-button" className="border-button" onClick={addCollection}>
                     Add Collection
                 </button>
             </div>

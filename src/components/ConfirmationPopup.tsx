@@ -16,8 +16,8 @@ function ConfirmationPopup({ title, message, onConfirm, onCancel }: Confirmation
                 <div className="divider"></div>
                 <p>{message}</p>
                 <div className="hlg">
-                    <button onClick={onCancel}>Cancel</button>
-                    <button onClick={onConfirm} className="delete-button">Delete</button>
+                    <button onClick={onCancel} className="border-button">Cancel</button>
+                    <button onClick={onConfirm} className="delete-button border-button">Delete</button>
                 </div>
             </div>
         </div>

@@ -1,0 +1,29 @@
+#settings {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    padding: 10px
+}
+.settings-card {
+    background-color: var(--bg-alt);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    text-align: left;
+}
+
+.settings-card h2 {
+    margin: 4px 5px;
+}
+
+.settings-entry {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding: 5px 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.settings-entry:hover {
+    background-color: var(--border);
+}

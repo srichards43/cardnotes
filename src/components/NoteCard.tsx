@@ -70,7 +70,7 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
         <div className={`note-card ${dragging ? 'dragging' : ''} ${note.color ? `note-${note.color}` : ''}`}
             draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd}
         >
-            <textarea ref={titleRef} className="title-field" value={note.title} autoFocus
+            <textarea ref={titleRef} className="title-field" value={note.title}
                 onChange={(event) => { 
                     onChange(note.id, event.target.value, note.content)
                     autoSize(titleRef.current)

@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-between;
     text-align: left;
-    background-color: var(--code-bg);
+    background-color: var(--bg-alt);
     transition: background-color 0.3s ease;
     overflow: visible;
     position: relative;
@@ -37,7 +37,7 @@
 }
 
 .collection-card:hover {
-    background-color: var(--social-bg);
+    background-color: var(--border);
 }
 
 .collection-card:hover h2 {

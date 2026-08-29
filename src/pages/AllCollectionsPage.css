@@ -6,15 +6,10 @@
 }
 
 #add-collection-button {
-    background-color: transparent;
     color: var(--accent);
-    border: 2px solid var(--accent);
-    padding: 8px 16px;
-    border-radius: 8px;
+    border-color: var(--accent);
     cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.5s, color 0.5s;
+
 }
 
 #add-collection-button:hover {

@@ -22,10 +22,10 @@ function CollectionPage() {
         collection => collection.id === id
     )
 
-    const [noteToDelete, setNoteToDelete] = useState<String | null>(null)
+    const [noteToDelete, setNoteToDelete] = useState<String | null>(null) // id
     const deletingNote = collection?.notes.find(note => note.id === noteToDelete)
 
-    const [draggedNoteId, setDraggedNoteId] = useState<string | null>(null)
+    const [draggedNote, setDraggedNote] = useState<Note | null>(null)
     const [dropTarget, setDropTarget] = useState<{
         section: Note['status']
         index: number
@@ -127,8 +127,11 @@ function CollectionPage() {
     }
 
     function handleDragStart(id: string) {
-        console.log(`Dragging note with id: ${id}`)
-        setDraggedNoteId(id)
+        if (!collection) return
+        const note = collection.notes.find(note => note.id === id)
+        if (note) {
+            setDraggedNote(note)
+        }
     }
 
     function handleDragOver(index: number, section: Note['status']) {
@@ -139,39 +142,48 @@ function CollectionPage() {
     }
 
     function handleDragEnd() {
-        setDraggedNoteId(null)
+        setDraggedNote(null)
         setDropTarget(null)
     }
 
     function handleDrop() {
-        if (!draggedNoteId || !collection || !dropTarget) {
-            setDraggedNoteId(null)
+        if (!draggedNote || !collection || !dropTarget) {
+            setDraggedNote(null)
             setDropTarget(null)
             return
         }
-        const { index, section } = dropTarget
+        const { index: rawIndex, section } = dropTarget
 
-        const draggedNote = collection.notes.find(note => note.id === draggedNoteId)
-        if (!draggedNote) return
+        // Find dragged index in target section if exists
+        const sectionNotes = collection.notes.filter(note => note.status === section)
+        let draggedIndexInSection = -1
+        if (draggedNote.status === section) {
+            draggedIndexInSection = sectionNotes.findIndex(note => note.id === draggedNote.id)
+        }
 
-        const remainingNotes = collection.notes.filter(note => note.id !== draggedNoteId)
+        // If in same section, adjust index to account for space
+        let computedIndex = rawIndex
+        if (draggedIndexInSection !== -1 && draggedIndexInSection < rawIndex) {
+            computedIndex = rawIndex - 1
+        }
 
+        const remainingNotes = collection.notes.filter(note => note.id !== draggedNote.id)
         const movedNote = {...draggedNote, status: section}
 
         const targetIds = remainingNotes.filter(note => note.status === section).map(note => note.id)
 
-        if (index >= targetIds.length) {
+        if (computedIndex >= targetIds.length) {
             remainingNotes.push(movedNote);
         } else {
-            const targetId = targetIds[index];
+            const targetId = targetIds[computedIndex];
             const targetIndex = remainingNotes.findIndex(note => note.id === targetId);
-
+            
             remainingNotes.splice(targetIndex, 0, movedNote);
         }
         
         updateCollection({...collection, notes: remainingNotes})
 
-        setDraggedNoteId(null)
+        setDraggedNote(null)
         setDropTarget(null)
     }
 
@@ -216,6 +228,7 @@ function CollectionPage() {
                     onDragEnd={handleDragEnd}
                     onDrop={handleDrop}
                     dropTarget={dropTarget}
+                    draggedNote={draggedNote}
                 />
                 <NoteSection
                     title="In Progress"
@@ -232,6 +245,7 @@ function CollectionPage() {
                     onDragEnd={handleDragEnd}
                     onDrop={handleDrop}
                     dropTarget={dropTarget}
+                    draggedNote={draggedNote}
                 />
                 <NoteSection
                     title="Done"
@@ -248,6 +262,7 @@ function CollectionPage() {
                     onDragEnd={handleDragEnd}
                     onDrop={handleDrop}
                     dropTarget={dropTarget}
+                    draggedNote={draggedNote}
                 />
             </div>
             {noteToDelete && deletingNote && (
