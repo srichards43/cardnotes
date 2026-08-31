@@ -24,6 +24,8 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
     const contentRef = useRef<HTMLTextAreaElement>(null)
     const [dragging, setDragging] = useState(false)
 
+    const spellCheck = localStorage.getItem('spellCheckEnabled') === 'true'
+
     // Automatically adjust the height of the textarea based on content
     function autoSize(textarea: HTMLTextAreaElement | null) {
         if (!textarea) return
@@ -31,27 +33,29 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
         textarea.style.height = `${textarea.scrollHeight + HEIGHT_BUFFER}px` // buffer for descending characters
     }
 
+    // Create tooltip to follow cursor while dragging
     function handleDragStart(event: React.DragEvent) {
         setDragging(true)
-    onDragStart(note.id)
+        onDragStart(note.id)
 
-    const dragImage = document.createElement('div')
+        const dragImage = document.createElement('div')
 
-    dragImage.textContent = note.title
-  
-    dragImage.classList.add('tooltip')
+        dragImage.textContent = note.title
+    
+        dragImage.classList.add('tooltip')
 
-    if (note.color) {
-        dragImage.classList.add(`note-${note.color}`)
+        if (note.color) {
+            dragImage.classList.add(`note-${note.color}`)
+        }
+        document.body.appendChild(dragImage)
+
+        event.dataTransfer.setDragImage(dragImage, 20, 20)
+
+        setTimeout(() => {
+            document.body.removeChild(dragImage)
+        }, 0)
     }
-    document.body.appendChild(dragImage)
 
-    event.dataTransfer.setDragImage(dragImage, 20, 20)
-
-    setTimeout(() => {
-        document.body.removeChild(dragImage)
-    }, 0)
-}
     function handleDragEnd() {
         onDragEnd()
         
@@ -70,7 +74,7 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
         <div className={`note-card ${dragging ? 'dragging' : ''} ${note.color ? `note-${note.color}` : ''}`}
             draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd}
         >
-            <textarea ref={titleRef} className="title-field" value={note.title}
+            <textarea ref={titleRef} className="title-field" value={note.title} spellCheck={spellCheck}
                 onChange={(event) => { 
                     onChange(note.id, event.target.value, note.content)
                     autoSize(titleRef.current)
@@ -78,7 +82,7 @@ function NoteCard({ note, onDelete, onChange, onColorChange, paletteOpen, onPale
                 rows={1} 
             />
 
-            <textarea ref={contentRef} className="content-field" value={note.content} 
+            <textarea ref={contentRef} className="content-field" value={note.content} spellCheck={spellCheck}
                 onChange={(event) => { 
                     onChange(note.id, note.title, event.target.value)
                     autoSize(contentRef.current)

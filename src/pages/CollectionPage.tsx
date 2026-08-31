@@ -173,6 +173,7 @@ function CollectionPage() {
         const targetIds = remainingNotes.filter(note => note.status === section).map(note => note.id)
 
         if (computedIndex >= targetIds.length) {
+            // If at end, just push to array
             remainingNotes.push(movedNote);
         } else {
             const targetId = targetIds[computedIndex];
@@ -208,9 +209,7 @@ function CollectionPage() {
                     <img src={returnIcon} alt="return" width="40" height="40" />
                 </button>
                 <h1>{collection.title}</h1>
-                <button className="image-button" onClick={() => navigate('/')}>
-                    <img src={exportIcon} alt="export" width="40" height="40" />
-                </button>
+                <div className="empty-header"></div>
             </div>
             <div id="card-section-container">
                 <NoteSection
@@ -269,6 +268,7 @@ function CollectionPage() {
                 <ConfirmationPopup
                     title="Confirm Note Deletion"
                     message={`Are you sure you want to delete "${deletingNote.title}"?\n This action cannot be undone.`}
+                    confirmLabel="Delete"
                     onConfirm={confirmDeleteNote}
                     onCancel={() => setNoteToDelete(null)}
                 />

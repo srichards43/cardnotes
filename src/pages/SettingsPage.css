@@ -27,3 +27,8 @@
 .settings-entry:hover {
     background-color: var(--border);
 }
+
+.arrow {
+    font-size: 1.1em;
+    padding: 0 5px;
+}

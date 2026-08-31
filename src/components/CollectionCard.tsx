@@ -10,9 +10,10 @@ type CollectionCardData = {
     onMenuToggle: () => void
     onDelete: (id: string) => void
     onRename: (id: string, newTitle: string) => void
+    showId: boolean
 }
 
-function CollectionCard({ collection, menuOpen, cardCount, onMenuToggle, onDelete, onRename }: CollectionCardData) {
+function CollectionCard({ collection, menuOpen, cardCount, onMenuToggle, onDelete, onRename, showId }: CollectionCardData) {
     const [editing, setEditing] = useState(false)
 
     function saveTitle(newTitle: string) {
@@ -48,7 +49,9 @@ function CollectionCard({ collection, menuOpen, cardCount, onMenuToggle, onDelet
                     <h2>{collection.title}</h2>
                 )}
                 <p>{cardCount} cards</p>
-                <p className="collection-id">#{collection.id}</p>
+                {showId && (
+                    <p className="collection-id">#{collection.id}</p>
+                )}
             </div>
 
             <div className="collection-menu-container">

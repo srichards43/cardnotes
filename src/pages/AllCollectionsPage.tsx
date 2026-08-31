@@ -63,6 +63,8 @@ function AllCollectionsPage() {
             setOpenCollectionId(id)
         }
     }
+
+    const showId = localStorage.getItem('showCollectionIds') === 'true'
     
     return (
         <main>
@@ -85,6 +87,7 @@ function AllCollectionsPage() {
                         }}
                         onDelete = {deleteCollection}
                         onRename = {renameCollection}
+                        showId = {showId}
                     />
                 ))}
 
@@ -96,6 +99,7 @@ function AllCollectionsPage() {
                 <ConfirmationPopup 
                     title = "Delete Collection"
                     message = {`Are you sure you want to delete the collection "${deletingCollection?.title}"?\nThis action cannot be undone.`}
+                    confirmLabel = "Delete"
                     onConfirm = {confirmDeleteCollection}
                     onCancel = {() => setCollectionToDelete(null)}
                 />
